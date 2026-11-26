@@ -1,19 +1,17 @@
-// The Funniest Office Joke, Judged Head to Head
-// make.fun bounty: u-kevin-the-funniest-office-joke-judged-head-to-head-3dc3233c
-//
-// The program writes exactly one joke about office life — a single line,
-// 1-200 characters — to /output/entry.txt. It is deterministic, reads no
-// input, uses no network, and takes no arguments.
-//
-// The joke: a setup (replying-all to stop the reply-all storm), a turn
-// (the plea itself becomes the storm), and the punchline last.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
 
 const JOKE =
-  "I replied-all to ask everyone to stop replying all, and now 400 people are agreeing with me in a thread called 'STOP'.";
+  "I sent myself a calendar invite called 'Do Not Book' to finish the report, and now my boss has booked it every Monday at 9.";
 
-const outPath = process.env.OUTPUT_PATH ?? "/output/entry.txt";
+// Runtime gate: the sealed competition gate requires 1-200 characters on
+// exactly one line. Fail loudly instead of writing an invalid entry.
+const jokeLength = [...JOKE].length;
+if (jokeLength < 1 || jokeLength > 200) {
+  throw new Error(`joke must be 1-200 characters, got ${jokeLength}`);
+}
+if (/\r|\n/.test(JOKE)) {
+  throw new Error("joke must be a single line");
+}
 
-mkdirSync(dirname(outPath), { recursive: true });
-writeFileSync(outPath, JOKE, "utf8");
+mkdirSync("/output", { recursive: true });
+writeFileSync("/output/entry.txt", JOKE, "utf8");
